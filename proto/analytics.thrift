@@ -78,11 +78,11 @@ struct PartyPredicate {
 }
 
 /**
- * Предикат по дате
+ * Предикат по времени
  **/
 struct DatePredicate {
-    1: required Moment from_date
-    2: required Moment to_date
+    1: required base.Timestamp from_time // граница не включается
+    2: required base.Timestamp to_time // граница включается
 }
 
 /**
@@ -110,33 +110,45 @@ union Regions {
     2: list<string> countries
 }
 
+/** Структуры для разные режимов аналитики */
+struct StatsRevenuesAndRefunds {}
+struct StatsPaymentTools {}
+struct StatsUserStatuses {}
+struct StatsRevenue {}
+struct RegionsTopRegions {}
+struct RegionsTopCities {}
+struct RegionsTopCountries {}
+struct RegionsAllCountries {}
+struct RegionsAllCities {}
+
 union RegionsMode {
-    1: bool top_regions
-    2: bool top_cities
-    3: bool top_countries
-    4: bool all_countries
-    5: bool all_cities
+    1: RegionsTopRegions top_regions
+    2: RegionsTopCities top_cities
+    3: RegionsTopCountries top_countries
+    4: RegionsAllCountries all_countries
+    5: RegionsAllCities all_cities
 }
 
 union PeriodStatisticsMode {
-    1: bool revenues_and_refunds // график "Оборот и Возвраты" (см. шапку трифта)
+    1: StatsRevenuesAndRefunds revenues_and_refunds // график "Оборот и Возвраты" (см. шапку трифта)
     //any name of new analytics
 }
 
 union SegmentStatisticsMode {
-    1: bool payment_tools // график "Иструменты платежей" (см. шапку трифта)
+    1: StatsPaymentTools payment_tools // график "Иструменты платежей" (см. шапку трифта)
     //any name of new analytics
 }
 
 union TableStatisticsMode {
-    1: bool users_statuses // график "Статусы по пользователям" (см. шапку трифта)
+    1: StatsUserStatuses users_statuses // график "Статусы по пользователям" (см. шапку трифта)
     //any name of new analytics
 }
 
 union SimpleCountMode {
-    1: bool revenue // чиселка "Оборот за период" (см. шапку трифта)
+    1: StatsRevenue revenue // чиселка "Оборот за период" (см. шапку трифта)
     //any name of new analytics
 }
+
 /**
  * Сервис для работы с аналитикой
  **/
