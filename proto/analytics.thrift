@@ -157,25 +157,25 @@ service AnalyticsService {
     /**
      * Получение данных для линейных/столбчатых графиков
      **/
-    PeriodStatistics getPeriodStatistics(1: PeriodStatisticsMode mode, 2: Predicate predicate) // [ {момент времени + [{Название сегмента + цифра}...]} ... ]
+    PeriodStatistics GetPeriodStatistics(1: PeriodStatisticsMode mode, 2: Predicate predicate) // [ {момент времени + [{Название сегмента + цифра}...]} ... ]
 
     /**
      * Получение данных для графика по сегментам (Pie Chart)
      **/
-    SegmentStatistics getSegmentStatistics(1: SegmentStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + цифра} ... ]
+    SegmentStatistics GetSegmentStatistics(1: SegmentStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + цифра} ... ]
 
     /**
      * Получение данных для таблицы
      **/
-    TableStatistics getTableStatistics(1: TableStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + [{Название сегмента + цифра}]} ...]
+    TableStatistics GetTableStatistics(1: TableStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + [{Название сегмента + цифра}]} ...]
 
     /**
      * Получение числа по предикату
      **/
-    Count getSimpleCount(1: SimpleCountMode mode, 2: Predicate predicate) // num
+    Count GetSimpleCount(1: SimpleCountMode mode, 2: Predicate predicate) // num
 
     /**
      * Получение регионов (стран или городов) для ЛК.
      **/
-    Regions getRegions(1: RegionsMode mode, 2: Predicate predicate)
+    Regions GetRegions(1: RegionsMode mode, 2: Predicate predicate)
 }
