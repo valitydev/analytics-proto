@@ -31,7 +31,7 @@ enum Status {
  **/
 struct MerchantFilter {
     1: required string party_id
-    2: optional string shop_id
+    2: optional list<string> shop_ids
 }
 
 /**
@@ -115,6 +115,7 @@ struct PaymentToolDistributionResponse {
  **/
 struct SplitAmountResponse {
     1: required List<GroupedCurrencyOffsetAmount> grouped_currency_amounts
+    2: optional SplitUnit recommended_unit
 }
 
 /**
@@ -138,6 +139,7 @@ struct OffsetAmount {
  **/
 struct SplitCountResponse {
     1: required List<GroupedCurrencyOffsetCount> payment_tools_destrobutions
+    2: optional SplitUnit recommended_unit
 }
 
 /**
