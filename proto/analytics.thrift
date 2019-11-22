@@ -1,152 +1,172 @@
 include "base.thrift"
 
 namespace java com.rbkmoney.damsel.analytics
-namespace erlang analytics
-
-/**
- * Сервис для выдачи данных для построения графиков
- *
- * см. графики
- * https://projects.invisionapp.com/share/YKOFERE9NC7#/screens/323916505
- **/
-
-typedef map<string, i64> DataPair // колонка + значение колонки, либо имя графика + значение графика в точке
-
-typedef i64 Count
 
 /**
  * В каком разбиении сервис отдаёт данные.
  **/
-enum AggregationType {
-    HOURLY
-    DAILY
-    MONTHLY
-    YEARLY
+enum SplitUnit {
+    MINUTE
+    HOUR
+    DAY
+    WEEK
+    MONTH
+    YEAR
 }
 
 /**
- * Структура для описания точки на оси даты на графике PeriodStatistics
+ * Статусы платежей.
  **/
-struct Moment {
-    1: required base.Year year
-    2: required base.Month month
-    3: required base.DayOfMonth day
-    4: required i8 hour
+enum PaymentStatus {
+    PENDING
+    PROCESSED
+    CAPTURED
+    CANCELLED
+    REFUNDED
+    FAILED
 }
 
 /**
- * Структура для линейных/столбчатых графиков
+ * Параметры фильтрации мерчанта
  **/
-struct PeriodStatistics {
-    1: required AggregationType type
-    2: required list<MomentData> data
-}
-
-
-/**
- * Кусок данных для линейных/столбчатых графиков
- **/
-struct MomentData {
-    1: required Moment moment
-    2: required list<DataPair> data_set
-}
-
-/**
- * Статистика табличного вида
- **/
-typedef list<RowStatistics> TableStatistics
-
-/**
- * Имя строки и колонки со значениями
- **/
-struct RowStatistics {
-    1: required string category
-    2: required list<DataPair> column_data_set
-}
-
-/**
- * Статистика сегментного вида (Pie Chart)
- **/
-typedef list<DataPair> SegmentStatistics
-
-/**
- * Предикат по мерчанту и его магазинам
- **/
-struct PartyPredicate {
+struct MerchantFilter {
     1: required string party_id
-    2: optional list<string> party_shops
+    2: optional list<string> shop_ids
 }
 
 /**
- * Предикат по времени
+ * Параметры фильтрации по времени
  **/
-struct DatePredicate {
-    1: required base.Timestamp from_time // граница не включается
-    2: required base.Timestamp to_time // граница включается
+struct TimeFilter {
+    1: required base.Timestamp from_time
+    2: required base.Timestamp to_time
 }
 
 /**
- * Предикат по странам или городам платежей
+ * Запрос с разбивкой по периодам
  **/
-union RegionPredicate {
-    1: list<string> cities
-    2: list<string> countries
+struct FilterRequest {
+    1: required MerchantFilter merchant_filter
+    2: required TimeFilter time_filter
 }
 
 /**
- * Общий предикат для запросов
+ * Запрос с разбивкой по периодам сгруппированый по отрезкам
  **/
-struct Predicate {
-    1: required PartyPredicate party_predicate
-    2: required DatePredicate date_predicate
-    3: optional RegionPredicate region_predicate
+struct SplitFilterRequest {
+    1: required FilterRequest filter_request
+    // Желаемый уровень разбиения, может быть изменен при неадекватности запроса
+    2: required SplitUnit split_unit
 }
 
 /**
- * Список городов или стран
+ * Распределение в процентах для чего-либо
  **/
-union Regions {
-    1: list<string> cities
-    2: list<string> countries
+struct NamingDistribution {
+    1: required string name
+    2: required base.Percent percents
 }
 
-/** Структуры для разные режимов аналитики */
-struct StatsRevenuesAndRefunds {}
-struct StatsPaymentTools {}
-struct StatsUserStatuses {}
-struct StatsRevenue {}
-struct RegionsTopRegions {}
-struct RegionsTopCities {}
-struct RegionsTopCountries {}
-struct RegionsAllCountries {}
-struct RegionsAllCities {}
-
-union RegionsMode {
-    1: RegionsTopRegions top_regions
-    2: RegionsTopCities top_cities
-    3: RegionsTopCountries top_countries
-    4: RegionsAllCountries all_countries
-    5: RegionsAllCities all_cities
+/**
+ * Список оборотов с группировкой по  валютам
+ **/
+struct AmountResponse {
+    1: required list<CurrencyGroupedAmount> groups_amount
 }
 
-union PeriodStatisticsMode {
-    1: StatsRevenuesAndRefunds revenues_and_refunds // график "Оборот и Возвраты" (см. шапку трифта)
-    //any name of new analytics
+/**
+ * Результат запроса распределения ошибок
+ **/
+struct ErrorDistributionsResponse {
+    1: required list<NamingDistribution> error_distributions
 }
 
-union SegmentStatisticsMode {
-    1: StatsPaymentTools payment_tools // график "Иструменты платежей" (см. шапку трифта)
-    //any name of new analytics
+/**
+ * Сгруппированное по валюте значение оборота
+ **/
+struct CurrencyGroupedAmount {
+    1: required base.Amount amount
+    2: required base.CurrencySymbolicCode currency
 }
 
-union TableStatisticsMode {
-    1: StatsUserStatuses users_statuses // график "Статусы по пользователям" (см. шапку трифта)
-    //any name of new analytics
+/**
+ * Результат запроса колличества сгруппированных по валютам
+ **/
+struct CountResponse {
+    1: required list<CurrecyGroupCount> groups_count
 }
 
-union SimpleCountMode {
-    1: StatsRevenue revenue // чиселка "Оборот за период" (см. шапку трифта)
-    //any name of new analytics
+/**
+ * Сгруппированное по валюте колличество
+ **/
+struct CurrecyGroupCount {
+    1: required base.Count count
+    2: required base.CurrencySymbolicCode currency
+}
+
+/**
+ * Результат запроса распределения платежных средств
+ **/
+struct PaymentToolDistributionResponse {
+    1: required list<NamingDistribution> payment_tools_distributions
+}
+
+/**
+ * Результат запроса оборотов разделенного на временные участки и сгруппированного по валюте
+ **/
+struct SplitAmountResponse {
+    1: required list<GroupedCurrencyOffsetAmount> grouped_currency_amounts
+    // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
+    2: required SplitUnit result_split_unit
+}
+
+/**
+ * Результат оборотов сгруппированных по валюте
+ **/
+struct GroupedCurrencyOffsetAmount {
+    1: required base.CurrencySymbolicCode currency
+    2: required list<OffsetAmount> offset_amounts
+}
+
+/**
+ * Оборот со смещением в временном интервале
+ **/
+struct OffsetAmount {
+    1: required base.Amount amount
+    2: required base.Count offset
+}
+
+/**
+ * Результат запроса колличества платежей разделенного на временные участки и сгруппированного по валюте и статусам
+ **/
+struct SplitCountResponse {
+    1: required list<GroupedCurrencyOffsetCount> payment_tools_destrobutions
+    // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
+    2: required SplitUnit result_split_unit
+}
+
+/**
+ * Колличества платежей сгруппированые по валюте
+ **/
+struct GroupedCurrencyOffsetCount {
+    1: required base.CurrencySymbolicCode currency
+    2: required list<GroupedStatusOffsetCount> offset_amounts
+}
+
+/**
+ * Колличества платежей сгруппированые по статусам
+ **/
+struct GroupedStatusOffsetCount {
+    1: required PaymentStatus status
+    2: required list<OffsetCount> offsetCounts
+}
+
+/**
+ * Колличество платежей со смещением в временном интервале
+ **/
+struct OffsetCount {
+    1: required base.Count count
+    2: required base.Count offset
 }
 
 /**
@@ -155,27 +175,43 @@ union SimpleCountMode {
 service AnalyticsService {
 
     /**
-     * Получение данных для линейных/столбчатых графиков
+     * Получение распределения использования платежных инструментов для ЛК.
      **/
-    PeriodStatistics GetPeriodStatistics(1: PeriodStatisticsMode mode, 2: Predicate predicate) // [ {момент времени + [{Название сегмента + цифра}...]} ... ]
+    PaymentToolDistributionResponse GetPaymentsToolDistribution(1: FilterRequest request)
 
     /**
-     * Получение данных для графика по сегментам (Pie Chart)
+     * Получение списка оборотов с группировкой по валютам для ЛК.
      **/
-    SegmentStatistics GetSegmentStatistics(1: SegmentStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + цифра} ... ]
+    AmountResponse GetPaymentsAmount(1: FilterRequest request)
 
     /**
-     * Получение данных для таблицы
+     * Получение среднего размера платежа с группировкой по валютам для ЛК.
      **/
-    TableStatistics GetTableStatistics(1: TableStatisticsMode mode, 2: Predicate predicate) // [ {Название сегмента + [{Название сегмента + цифра}]} ...]
+    AmountResponse GetAveragePayment(1: FilterRequest request)
 
     /**
-     * Получение числа по предикату
+     * Получение колличества платежей с группировкой по валютам для ЛК.
      **/
-    Count GetSimpleCount(1: SimpleCountMode mode, 2: Predicate predicate) // num
+    CountResponse GetPaymentsCount(1: FilterRequest request)
 
     /**
-     * Получение регионов (стран или городов) для ЛК.
+     * Получение распределения ошибок для ЛК.
      **/
-    Regions GetRegions(1: RegionsMode mode, 2: Predicate predicate)
+    ErrorDistributionsResponse GetPaymentsErrorDistribution(1: FilterRequest request)
+
+    /**
+     * Получение списка оборотов с группировкой по валютам и разделенные по временным интервалам для ЛК.
+     **/
+    SplitAmountResponse GetPaymentsSplitAmount(1: SplitFilterRequest request)
+
+    /**
+     * Получение колличества платежей с группировкой по валютам и статусам, разделенные по временным интервалам для ЛК.
+     **/
+    SplitCountResponse GetPaymentsSplitCount(1: SplitFilterRequest request)
+
+    /**
+     * Получение списка возвратов с группировкой по валютам для ЛК.
+     **/
+    AmountResponse GetRefundsAmount(1: FilterRequest request)
+
 }
