@@ -55,6 +55,7 @@ struct FilterRequest {
  **/
 struct SplitFilterRequest {
     1: required FilterRequest filter_request
+    // Желаемый уровень разбиения, может быть изменен при неадекватности запроса
     2: required SplitUnit split_unit
 }
 
@@ -115,7 +116,8 @@ struct PaymentToolDistributionResponse {
  **/
 struct SplitAmountResponse {
     1: required List<GroupedCurrencyOffsetAmount> grouped_currency_amounts
-    2: optional SplitUnit recommended_unit
+    // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
+    2: required SplitUnit result_split_unit
 }
 
 /**
@@ -139,7 +141,8 @@ struct OffsetAmount {
  **/
 struct SplitCountResponse {
     1: required List<GroupedCurrencyOffsetCount> payment_tools_destrobutions
-    2: optional SplitUnit recommended_unit
+    // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
+    2: required SplitUnit result_split_unit
 }
 
 /**
