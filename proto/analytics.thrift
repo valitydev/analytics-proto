@@ -108,14 +108,14 @@ struct CurrecyGroupCount {
  * Результат запроса распределения платежных средств
  **/
 struct PaymentToolDistributionResponse {
-    1: required List<NamingDistribution> payment_tools_distributions
+    1: required list<NamingDistribution> payment_tools_distributions
 }
 
 /**
  * Результат запроса оборотов разделенного на временные участки и сгруппированного по валюте
  **/
 struct SplitAmountResponse {
-    1: required List<GroupedCurrencyOffsetAmount> grouped_currency_amounts
+    1: required list<GroupedCurrencyOffsetAmount> grouped_currency_amounts
     // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
     2: required SplitUnit result_split_unit
 }
@@ -140,7 +140,7 @@ struct OffsetAmount {
  * Результат запроса колличества платежей разделенного на временные участки и сгруппированного по валюте и статусам
  **/
 struct SplitCountResponse {
-    1: required List<GroupedCurrencyOffsetCount> payment_tools_destrobutions
+    1: required list<GroupedCurrencyOffsetCount> payment_tools_destrobutions
     // Фактический уровень разбиения, может быть равен желаемому или заменен на более подходящий
     2: required SplitUnit result_split_unit
 }
@@ -150,7 +150,7 @@ struct SplitCountResponse {
  **/
 struct GroupedCurrencyOffsetCount {
     1: required base.CurrencySymbolicCode currency
-    2: required List<GroupedStatusOffsetCount> offset_amounts
+    2: required list<GroupedStatusOffsetCount> offset_amounts
 }
 
 /**
