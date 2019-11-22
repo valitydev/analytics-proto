@@ -17,7 +17,7 @@ enum SplitUnit {
 /**
  * Статусы платежей.
  **/
-enum Status {
+enum PaymentStatus {
     PENDING
     PROCESSED
     CAPTURED
@@ -157,7 +157,7 @@ struct GroupedCurrencyOffsetCount {
  * Колличества платежей сгруппированые по статусам
  **/
 struct GroupedStatusOffsetCount {
-    1: required Status status
+    1: required PaymentStatus status
     2: required list<OffsetCount> offsetCounts
 }
 
