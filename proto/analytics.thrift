@@ -125,7 +125,7 @@ struct SplitAmountResponse {
  **/
 struct GroupedCurrencyOffsetAmount {
     1: required base.CurrencySymbolicCode currency
-    2: required List<OffsetAmount> offset_amounts
+    2: required list<OffsetAmount> offset_amounts
 }
 
 /**
