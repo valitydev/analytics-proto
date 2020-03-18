@@ -1,4 +1,5 @@
 namespace java com.rbkmoney.damsel.analytics
+namespace erlang analytics
 
 /**
  * Отметка во времени согласно RFC 3339.

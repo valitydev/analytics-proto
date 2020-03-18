@@ -10,7 +10,7 @@ TEMPLATES_PATH := .
 SERVICE_NAME := analytics_proto
 
 # Build image tag to be used
-BUILD_IMAGE_TAG := 55e987e74e9457191a5b4a7c5dc9e3838ae82d2b
+BUILD_IMAGE_TAG := 171d7d5ceb20cb2bf4cf0f3a82bee23a95a6fccc
 CALL_ANYWHERE := \
 	all submodules compile clean distclean \
 	java.compile java.deploy

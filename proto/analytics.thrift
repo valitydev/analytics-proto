@@ -1,6 +1,7 @@
 include "base.thrift"
 
 namespace java com.rbkmoney.damsel.analytics
+namespace erlang analytics
 
 /**
  * В каком разбиении сервис отдаёт данные.

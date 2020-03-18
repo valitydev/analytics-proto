@@ -1,0 +1,9 @@
+{application, analytics_proto, [
+    {description, "Thrift proto for Analytics"},
+    {vsn, "0.1.0"},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {maintainers, []}
+]}.
