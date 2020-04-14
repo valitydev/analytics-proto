@@ -16,4 +16,4 @@ typedef i64 Count
 
 typedef i64 Amount
 
-typedef i64 Percent
+typedef double Percent
