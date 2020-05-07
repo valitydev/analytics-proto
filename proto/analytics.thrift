@@ -215,4 +215,9 @@ service AnalyticsService {
      **/
     AmountResponse GetRefundsAmount(1: FilterRequest request)
 
+    /**
+     * Получение балансов с группировкой по валютам для ЛК.
+     **/
+    AmountResponse GetCurrentBalances(1: FilterRequest request)
+
 }
