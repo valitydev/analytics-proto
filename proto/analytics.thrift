@@ -218,6 +218,6 @@ service AnalyticsService {
     /**
      * Получение балансов с группировкой по валютам для ЛК.
      **/
-    AmountResponse GetCurrentBalances(1: FilterRequest request)
+    AmountResponse GetCurrentBalances(1: MerchantFilter merchant_filter)
 
 }
