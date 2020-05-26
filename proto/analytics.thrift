@@ -69,6 +69,22 @@ struct NamingDistribution {
 }
 
 /**
+ * Ошибка с вложенными подоошибками
+ **/
+struct SubError {
+    1: required string code
+    2: optional SubError sub_error
+}
+
+/**
+ * Распределение в процентах для ошибок
+ **/
+struct ErrorDistribution {
+    1: required SubError error
+    2: required base.Percent percents
+}
+
+/**
  * Список оборотов с группировкой по  валютам
  **/
 struct AmountResponse {
@@ -80,6 +96,13 @@ struct AmountResponse {
  **/
 struct ErrorDistributionsResponse {
     1: required list<NamingDistribution> error_distributions
+}
+
+/**
+ * Результат запроса распределения ошибок с подошибками
+ **/
+struct SubErrorDistributionsResponse {
+    1: required list<ErrorDistribution> error_distributions
 }
 
 /**
@@ -196,9 +219,14 @@ service AnalyticsService {
     CountResponse GetPaymentsCount(1: FilterRequest request)
 
     /**
-     * Получение распределения ошибок для ЛК.
+     * Получение распределения ошибок по причине ошибки для ЛК.
      **/
     ErrorDistributionsResponse GetPaymentsErrorDistribution(1: FilterRequest request)
+
+    /**
+     * Получение распределения ошибок c подошибками для ЛК.
+     **/
+    SubErrorDistributionsResponse GetPaymentsSubErrorDistribution(1: FilterRequest request)
 
     /**
      * Получение списка оборотов с группировкой по валютам и разделенные по временным интервалам для ЛК.
