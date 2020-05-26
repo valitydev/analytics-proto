@@ -73,7 +73,7 @@ struct NamingDistribution {
  **/
 struct SubError {
     1: required string code
-    2: optional SubError subError
+    2: optional SubError sub_error
 }
 
 /**
