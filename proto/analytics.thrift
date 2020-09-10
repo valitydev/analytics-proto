@@ -33,6 +33,7 @@ enum PaymentStatus {
 struct MerchantFilter {
     1: required string party_id
     2: optional list<string> shop_ids
+    3: optional list<string> exclude_shop_ids
 }
 
 /**
