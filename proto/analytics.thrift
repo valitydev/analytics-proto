@@ -92,6 +92,10 @@ struct AmountResponse {
     1: required list<CurrencyGroupedAmount> groups_amount
 }
 
+struct ShopAmountResponse {
+    1: required list<ShopGroupedAmount> groups_amount
+}
+
 /**
  * Результат запроса распределения ошибок
  **/
@@ -112,6 +116,15 @@ struct SubErrorDistributionsResponse {
 struct CurrencyGroupedAmount {
     1: required base.Amount amount
     2: required base.CurrencySymbolicCode currency
+}
+
+/**
+ * Сгруппированное по магазину значение оборота
+ **/
+struct ShopGroupedAmount {
+    1: required base.Amount amount
+    2: required string shop_id
+    3: required base.CurrencySymbolicCode currency
 }
 
 /**
@@ -248,5 +261,10 @@ service AnalyticsService {
      * Получение балансов с группировкой по валютам для ЛК.
      **/
     AmountResponse GetCurrentBalances(1: MerchantFilter merchant_filter)
+
+    /**
+    * Получение текущего баланса с группировкой по магазинам
+    **/
+    ShopAmountResponse GetCurrentShopBalances(1: MerchantFilter merchant_filter)
 
 }
