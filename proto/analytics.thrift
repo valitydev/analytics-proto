@@ -223,6 +223,11 @@ service AnalyticsService {
     AmountResponse GetPaymentsAmount(1: FilterRequest request)
 
     /**
+     * Получение списка зачислений с группировкой по валютам для ЛК.
+     **/
+    AmountResponse GetCreditingsAmount(1: FilterRequest request)
+
+    /**
      * Получение среднего размера платежа с группировкой по валютам для ЛК.
      **/
     AmountResponse GetAveragePayment(1: FilterRequest request)
