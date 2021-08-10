@@ -4,6 +4,7 @@ namespace java com.rbkmoney.damsel.analytics.search
 namespace erlang analytics
 
 typedef string PartyId
+typedef string Timestamp
 
 struct CategoryFilter {
     1: optional string name
@@ -19,7 +20,7 @@ struct PartyFilter {
 }
 
 struct ContractFilter {
-    1: optional string legal_agreement_signed_at
+    1: optional Timestamp legal_agreement_signed_at
 }
 
 struct PartyFilterRequest {
