@@ -1,4 +1,4 @@
-namespace java com.rbkmoney.damsel.analytics
+namespace java dev.vality.damsel.analytics
 namespace erlang analytics
 
 /**
